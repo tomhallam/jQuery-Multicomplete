@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="jquery-multicomplete.js"></script>
+        <script>
+            $(document).ready(function() {
+               $('#input-multicomplete').multicomplete({
+                   minimum_length: 1,
+                   result_template: function(row, group) {
+                        tmpl = '<div>';
+                            if(!!row.image) {
+                                tmpl += '<div class="image"><img src="' + row.image + '" /></div>';
+                            }
+                            tmpl += '<div><a>' + row.name + '</a></div>';
+                            if(!!row.job) {
+                                tmpl += '<div class="meta">' + row.job + (!!row.company ? '<span>, ' + row.company + '</span>' : '') + '</div>';
+                            }
+                            if(!!row.address) {
+                                tmpl += '<div class="meta">' + row.address + '</div>';
+                            }
+                            if(!!row.cuisine) {
+                                tmpl += '<div class="meta"><strong>Cuisine</strong>: ' + row.cuisine + '</div>';
+                            }
+                        tmpl += '<div class="clearfix"></div></div>';
+                       return tmpl;
+                   },
+                   result_click: function(row, group) {
+                       switch(group) {
+                           case 'Employees':
+                               window.location = '/employee/' + row.id;
+                               break;
+                           case 'Businesses':
+                               window.location = row.website; 
+                               break;
+                       }
+                   },
+                   source: 'demo-source.json'
+               }); 
+            });
+        </script>
+        <style type="text/css">
+            
+            .panel-multicomplete-results {
+                border: 1px solid #ccc;
+                width: 420px;
+                font-family: Tahoma;
+                font-size: 12px;
+                background: url(mc-bg.png) repeat-y;
+            }
+            
+            .panel-multicomplete-results .results {}
+            
+            .panel-multicomplete-results .result {
+                padding: 5px;
+                border-bottom: 1px solid #e7e7e7;
+                cursor: pointer;
+            }
+            
+            .panel-multicomplete-results .result:last-child {
+                border: none;
+            }
+            
+            .panel-multicomplete-results .group {
+                border-bottom: 1px solid #ccc;
+            }
+            
+            .panel-multicomplete-results .group:last-child {
+                border: none;
+            }
+            
+            .panel-multicomplete-results .group-title {
+                float: left;
+                width: 100px;
+                padding: 5px;
+                font-weight: bold;
+            }
+            
+            .panel-multicomplete-results .group-items {
+                float: left;
+                width: 300px;
+            }
+            
+            .clearfix {
+                clear: both;
+            }
+            
+            .highlight {
+                font-weight: bold;
+            }
+            
+            /* DEMO SPECIFIC */
+            
+            .result .image {
+                float: left;
+                margin-right: 10px;
+            }
+            
+            .result .image img {
+                width: 32px;
+                height: 32px;
+                border: 1px solid #ccc;
+                padding: 1px;
+            }
+            
+            .result .meta {
+                font-size: 11px;
+                color: #666;
+            }
+            
+            .result a {
+                text-decoration: underline;
+            }
+            
+            .result:hover {
+                background-color: #f7f7f7;
+            }
+            
+            
+        </style>
+    </head>
+    <body>
+        <div>
+            Multicomplete: <input type="text" name="multiselect" id="input-multicomplete" />
+        </div>        
+    </body>
+</html>
