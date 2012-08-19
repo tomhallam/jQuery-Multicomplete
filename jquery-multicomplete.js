@@ -2,7 +2,8 @@
  * 
     * jQuery MultiComplete
     * =====================
-    * Written by Tom Hallam, Nudge Digital
+    * Written by Tom Hallam
+    * http://tomhallam.github.com/multicomplete
     * Licenced with the Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0) licence
     * See: http://creativecommons.org/licenses/by-sa/3.0/
  * 
@@ -14,6 +15,9 @@
 
         // Set up the default options
         var defaults = {
+
+            // Debug mode provides verbose error messages
+            debug: true,
 
             // Source
             source: [],
@@ -52,10 +56,10 @@
             result_click: null,
             
             // On result hover
-            onResultHover: null,
+            result_hover: null,
             
             // On form submit
-            onFormSubmit: null
+            form_submit: null
             
         }, 
         
@@ -106,18 +110,12 @@
                         case 'string':
                             timers[id] = window.setTimeout(function(){ 
                                 multicomplete_searchajax(function() {
+                                    
                                     // Render the results that we found
                                     multicomplete_render(el);
+                                    
                                 }); 
                             }, settings.search_delay);
-                            break;
-                        case 'function':
-
-                            multicomplete_searchfunction();
-                            
-                            // Render the results that we found
-                            multicomplete_render(el);
-                                                        
                             break;
                         case 'object':
                             
@@ -193,22 +191,42 @@
             }
             
         }
-        
-        // Search a function
-        function multicomplete_searchfunction() {
-            source = settings.source();
-        }
-        
+
         // Search an AJAX endpoint
         function multicomplete_searchajax(callback) {
             
-            // 
+            // Perform the remote call.
             ajax = $.ajax({
                 'type': settings.method,
                 'url': settings.source,
                 'dataType': 'json',
+                'data': {
+                    'query': query
+                },
                 'success': function(data) {
-                    console.log(callback);
+                    
+                    // Loop through the source
+                    for(var group_name in data) {
+                        if(data[group_name].length)
+                            groups[group_name] = multicomplete_parsegroup(data[group_name], group_name);
+                    }
+                    
+                    // Call the callback
+                    callback.call(this, data);
+                    
+                },
+                'error': function(error) {
+                    if(settings.debug == true) {
+                            if(error.status == 412) {
+                                alert('Your remote data source is not valid JSON! Remember to use double quotes instead of single.');
+                            }
+                            if(error.status == 404) {
+                                alert('Your remote data source does not exist on this server.');
+                            }
+                            if(error.status == 500) {
+                                alert('The remote server encountered an error whilst processing your source.');
+                            }
+                    }
                 }
             });
             
