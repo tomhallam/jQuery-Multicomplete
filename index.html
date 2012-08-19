@@ -48,7 +48,7 @@
 });
 </code></pre>
 
-<p>This will create an instance of Multicomplete which will query <code>search.php</code> to get its results. The next step is to get <code>search.php</code> to return what we need for the plugin to work!</p>
+<p>This will create an instance of Multicomplete which will query <code>search.php</code> to get its results by sending what was written in the input as a <code>query</code> header. If the plugin was set to use the <code>GET</code> method then the request would be <code>search.php?query=what+i+asked+for</code>. The next step is to get <code>search.php</code> to return what we need for the plugin to work!</p>
 
 <h3>Generating result JSON</h3>
 
@@ -346,7 +346,7 @@ class Search extends CI_Controller {
                     return tmpl;
                 },
                 'result_click': function(row, group) {
-                    alert('You chose ' + row.name + ' in ' + group);
+                    alert('You chose "' + row.name + '" in ' + group);
                 }
             });
         });
