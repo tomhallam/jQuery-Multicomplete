@@ -3,9 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>jQuery Multicomplete by tomhallam</title>
+    <title>jQuery Multicomplete by @tomhallam</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="demo.css" />
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
@@ -17,10 +18,6 @@
       <header>
         <h1>jQuery Multicomplete</h1>
         <p></p>
-
-        <p class="view"><a href="https://github.com/tomhallam/jQuery-Multicomplete">View the Project on GitHub <small>tomhallam/jQuery-Multicomplete</small></a></p>
-
-
         <ul>
           <li><a href="https://github.com/tomhallam/jQuery-Multicomplete/zipball/master">Download <strong>ZIP File</strong></a></li>
           <li><a href="https://github.com/tomhallam/jQuery-Multicomplete/tarball/master">Download <strong>TAR Ball</strong></a></li>
@@ -28,24 +25,249 @@
         </ul>
       </header>
       <section>
-        <h3>Welcome to GitHub Pages.</h3>
+        <h3>Let your users find what they want, instantly.</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>I created jQuery Multicomplete while I was working at <a href="http://nudgedigital.co.uk">Nudge Digital</a> because I saw a need for multiple result groups in one autocomplete action. Think the <a href="http://last.fm">last.fm</a> search box. Allow your users to find what they want, over multiple fields, instantly.</p>
+<p>Tested in IE6+, FF3+, Safari, Opera 10+ and Chrome. Try it yourself below!</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<form id="form-demo-field">
+    <div>
+        <label for="input-demo-multicomplete">City</label>
+        <input type="text" name="demo1" id="input-demo-multicomplete" placeholder="Try London or Amsterdam!" />
+    </div>
+</form>
+
+<h3>How to use it</h3>
+
+<p>Installation couldn't be simpler! Simply include jQuery, the Multicomplete plugin (including it's CSS if you want it to look pretty!) and add this to your initialisation code for the page:</p>
+
+<pre><code>$(document).ready(function() {
+    $('#my-input').multicomplete({
+        'source': 'search.php'
+    });
+});
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>This will create an instance of Multicomplete which will query <code>search.php</code> to get its results. The next step is to get <code>search.php</code> to return what we need for the plugin to work!</p>
 
-<h3>Designer Templates</h3>
+<h3>Generating result JSON</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>The plugin expects data back in a certain format, otherwise it will not work as expected. Consider this following excerpt from the demo:</p>
+<pre><code>{
+    "Takeaway": [
+        {
+            name: "Bobby's Takeaway",
+            address: "162a Stopes Croft, Bristol, TE5 3TT",
+            cuisine: "Moroccan, Wraps"
+        }
+    ],
+    "Pubs": [
+        {
+            name: "The Pipe and Slippers",
+            address: "11 Chelston Road, Bristol, TE5 3TT",
+            cuisine: "Pies, roasts, etc."
+        },
+        {
+            name: "The Hatchet",
+            address: "27 Frog Street, Bristol, TE5 3TT",
+            cuisine: "English pub grub"
+        }
+    ]
+}
+</code></pre>
 
-<h3>Rather Drive Stick?</h3>
+<p>You have the following structure:</p>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<pre><code>{
+  [name of group]: [
+        {
+            [result 1]
+        },
+        {
+            [result 2]
+        }
+    ],
+  [name of group]: [
+        {
+            [result 1]
+        },
+        {
+            [result 2]
+        },
+        {
+            [result 3]
+        },
+        [...]
+    ],
+}</code></pre>
+
+<p>Which can easily be generated in PHP or another language of your choice.</p>
+
+<p><strong>Important: </strong>jQuery Multicomplete has been designed to work with JSON only at this stage.</p>
+
+<h3>Example of generating result JSON in PHP</h3>
+
+<p>Here's a really simple example script to generate some results using a fake dataset. This code is not efficient and really is just meant  as a jump off point to get you thinking about how you'd grab your data.This example is using <a href="http://www.codeigniter.com">CodeIgniter and the Active Record Class</a>:</p>
+
+<strong>application/models/search_model.php</strong>
+<pre>
+class Search_Model extends CI_Model {
+
+    public function search_users($query) {
+        $this->db->like('users.first_name', $query);
+        $this->db->like('users.last_name', $query);
+        $this->db->like('users.address_line_1', $query);
+        $this->db->like('users.town', $query);
+
+        $users_object = $this->db->get('users');
+
+        if($users_object->num_rows() > 0) {
+            return $users_object->result();
+        }
+        else {
+            return array();
+        }
+    }
+
+    public function search_books($query) {
+        $this->db->join('authors', 'authors.id = books.author_id');
+        $this->db->like('authors.name', $query);
+        $this->db->like('books.name', $query);
+        $this->db->like('books.publish_date', $query);
+        $this->db->like('books.genre', $query);
+
+        $books_object = $this->db->get('books');
+
+        if($books_object->num_rows() > 0) {
+            return $books_object->result();
+        }
+        else {
+            return array();
+        }
+    }
+
+}
+</pre>
+
+<strong>application/controllers/search.php</strong>
+<pre>
+class Search extends CI_Controller {
+    
+    public function search() {
+        // Import variable from POST
+        $query = $this->input->post('query');
+        
+        if(!empty($query)) {
+            $this->load->model('search_model');
+            
+            // Perform the searches
+            $users = $this->search_model->search_users($query);
+            $books = $this->search_model->search_books($query);
+
+            // Format the result
+            $result = array(
+                'Users' => $users,
+                'Books' => $books
+            );
+
+            // Send the result back to the browser
+            header('Content-Type: application/json');
+            echo json_encode($result);
+            exit;
+
+        }
+
+    }
+
+}
+</pre>
+
+<p>For these examples to work, <code>source</code> needs to be set to <code>/search/search</code> in the initialization settings. See below for more information.</p>
+
+<h3>Initialization settings / Options</h3>
+
+<table>
+    <thead>
+    <th>Option</th>
+    <th>Default</th>
+    <th>Effect</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>debug</td>
+            <td>true</td>
+            <td>Provides error messages and logs variables to the console</td>
+        </tr>
+        <tr>
+            <td valign="top">source</td>
+            <td valign="top">[ ]</td>
+            <td>
+                <strong>When set to a string</strong><br />
+                Example: <code>search.php</code><br />
+                Will perform an AJAX request to this URL in an attempt to get a JSON response with your results.<br /><br />
+                <strong>When set to an array</strong><br />
+                Example: <a href="demo-source.json">see example</a><br />
+                Will search the local array based on the query. Much quicker than a AJAX request. Ignores <code>min_length</code> and <code>delay</code>.
+            </td>
+        </tr>
+        <tr>
+            <td>method</td>
+            <td>POST</td>
+            <td>Can be one of <code>GET</code> or <code>POST</code>. This dictates how the AJAX request is performed if <code>source</code> is set to a string.</td>
+        </tr>
+        <tr>
+            <td>minimum_length</td>
+            <td>3</td>
+            <td>How many characters the query needs to be before a search is triggered</td>
+        </tr>
+        <tr>
+            <td>search_delay</td>
+            <td>500</td>
+            <td>How many milliseconds after the last key is pressed before a search is triggered.</td>
+        </tr>
+         <tr>
+            <td>case_sensitive</td>
+            <td>false</td>
+            <td>When set to <code>true</code>, the search will only return results that match the exact case of the query.</td>
+        </tr>
+        <tr>
+            <td>highlight_results</td>
+            <td>true</td>
+            <td>Highlights the terms found within the result. Will only apply if the actual term is included in the template. Creates a <code>span</code> with a class of <code>highlight</code> to the found node.</td>
+        </tr>
+        <tr>
+            <td>offset_left</td>
+            <td>0</td>
+            <td>The results pane will be created at the bottom of the input element with a left offset of <code>offset_left</code> pixels. You do not need to include "px" on the end of this value.</td>
+        </tr>
+        <tr>
+            <td>offset_top</td>
+            <td>0</td>
+            <td>The results pane will be created at the bottom of the input element with a top offset of <code>offset_top</code> pixels. You do not need to include "px" on the end of this value.</td>
+        </tr>
+        <tr>
+            <td>result_template</td>
+            <td>N/A</td>
+            <td><a href="#result_templates">See the results section</a> for more information on how to create result templates.</td>
+        </tr>
+        <tr>
+            <td>result_click</td>
+            <td>N/A</td>
+            <td>Specify a function to be executed when a result is clicked.</td>
+        </tr>
+        <tr>
+            <td>form_submit</td>
+            <td>N/A</td>
+            <td>Specify a function to be executed when the form that encapsulates this element is submitted. See the discussion on form submissions for more information on what happens by default.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3><a name="result_templates"></a>Result Templates</h3>
+
+<p>A crucial element of the plugin is the ability to define how the results are displayed. Fortunately jQuery Multicomplete allows for complete flexibility over the markup output for various types of results. Below is the example template we use on the demo at the top of this page:</p>
+<script src="https://gist.github.com/3398044.js?file=gistfile1.txt"></script>
+<p><code>function(result, group)</code> is simply being passed the row of the resultset that was matched as the first parameter and the group the row was in as the second. This can be used to generate any form of markup you need for the resultset.</p>
 
 <h3>Authors and Contributors</h3>
 
@@ -61,6 +283,27 @@ $ git checkout gh-pages
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="https://raw.github.com/tomhallam/jQuery-Multicomplete/master/lib/jquery-multicomplete.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#input-demo-multicomplete').multicomplete({
+                'source': 'demo-source.json', // The source for the ajax call (can also be set to an array if you want really really quick searches!)
+                'offset_top': 11, // This is just for the demo to correct the autocomplete offset
+                'result_template': function(result, group) {
+                    tmpl = '<div>';
+                    if(!!result.image) {
+                        tmpl += '<div class="image"><img src="' + result.image + '" /></div>';
+                    }
+                        tmpl += '<div>' + result.name + '</div>';
+                        if(!!result.address) {
+                            tmpl += '<div class="meta">' + result.address + '</div>';
+                        }
+                    tmpl += '</div>';
+                    return tmpl;
+                }
+            });
+        });
+    </script>
   </body>
 </html>

@@ -236,6 +236,29 @@ footer {
   }
 }
 
+form {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #fff;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+form label {
+    display: inline-block;
+    font-weight: bold;
+    width: 70px;
+    font-size: 12px;
+}
+
+form input {
+    padding: 5px;
+    width: 385px;
+    border: 1px solid #c7c7c7;
+}
+
 @media print, screen and (max-width: 480px) {
   body {
     padding:15px;

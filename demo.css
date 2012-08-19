@@ -1,0 +1,77 @@
+  .panel-multicomplete-results {
+                border: 1px solid #ccc;
+                width: 395px;
+                font-family: Tahoma;
+                font-size: 12px;
+                background: url(mc-bg.png) repeat-y;
+                background-color: #fff;
+            box-shadow: 0 5px 15px #e7e7e7;
+            }
+            
+            .panel-multicomplete-results .results {}
+            
+            .panel-multicomplete-results .result {
+                padding: 5px;
+                border-bottom: 1px solid #e7e7e7;
+                cursor: pointer;
+            }
+            
+            .panel-multicomplete-results .result:last-child {
+                border: none;
+            }
+            
+            .panel-multicomplete-results .group {
+                border-bottom: 1px solid #ccc;
+            }
+            
+            .panel-multicomplete-results .group:last-child {
+                border: none;
+            }
+            
+            .panel-multicomplete-results .group-title {
+                float: left;
+                width: 100px;
+                padding: 5px;
+                font-weight: bold;
+            }
+            
+            .panel-multicomplete-results .group-items {
+                float: left;
+                width: 284px;
+                border-left: 1px solid #e7e7e7;
+            }
+            
+            .clearfix {
+                clear: both;
+            }
+            
+            .highlight {
+                font-weight: bold;
+            }
+            
+            /* DEMO SPECIFIC */
+            
+            .result .image {
+                float: left;
+                margin-right: 10px;
+            }
+            
+            .result .image img {
+                width: 32px;
+                height: 32px;
+                border: 1px solid #ccc;
+                padding: 1px;
+            }
+            
+            .result .meta {
+                font-size: 11px;
+                color: #666;
+            }
+            
+            .result a {
+                text-decoration: underline;
+            }
+            
+            .result:hover {
+                background-color: #f7f7f7;
+            }

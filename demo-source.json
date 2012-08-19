@@ -1,0 +1,48 @@
+{
+    "Attractions": [
+        {
+            "name": "The Tower of London",
+            "address": "London, EC3N 4AB",
+            "image": "http://www.hrp.org.uk/Images/TOL_Main.jpg"
+        },
+        {
+            "name": "Camden Lock Market",
+            "address": "1 Kentish Town Road, London, NW1 8",
+            "image": "http://www.london-attractions.info/images/attractions/camden-market.jpg"
+        },
+        {
+            "name": "Anne Frank Museum",
+            "address": "Prinsengracht 267, 1000 AS, Amsterdam",
+            "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/AnneFrankHouseAmsterdamtheNetherlands.jpg/220px-AnneFrankHouseAmsterdamtheNetherlands.jpg"
+        }
+    ],
+    "Hotels": [
+        {
+            "name": "The Ritz",
+            "address": "150 Piccadilly, London, W1J 9BR",
+            "image": "http://www.londonhotels.net/images/photogallery/the-ritz-london/the-ritz-london.jpg"
+        },
+         {
+             "name": "51 Buckingham Gate",
+             "address": "51 Buckingham Gate, London, SW1E 6AF",
+             "image": "http://static.laterooms.com/hotelphotos/laterooms/193559/gallery/51-buckingham-gate-london_060620111405093617.jpg"
+         },
+         {
+             "name": "Hotel de l'Europe",
+             "address": "2–14 Nieuwe Doelenstraat, Amsterdam, 1012 CP ",
+             "image": "http://www.concierge.com/images/cnt/lists/goldlist06/europe/netherlands/amsterdam/hotel_de_leurope/amsterdam_hotel_002p.jpg"
+         }
+    ],
+    "Restaurant": [
+        {
+            "name": "Petrus",
+            "address": "1 Kinnerton Street, Knightsbridge, London, SW1X 8EA",
+            "image": "http://berkshirereview.net/images/petrus_london_dining.jpg"
+        },
+        {
+            "name": "Vermeer",
+            "address": "Prins Hendrikkade 59-72, 1012 AD Amsterdam ",
+            "image": "http://www.restaurantvermeer.nl/Portals/7/UltraPhotoGallery/3425/45/[7].Vermeer---desert-2.jpg"
+        }
+    ]
+}
