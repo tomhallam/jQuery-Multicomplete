@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>jQuery Multicomplete Demo</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="../lib/jquery-multicomplete.css" rel="stylesheet" media="all" />
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="../lib/jquery-multicomplete.js"></script>
+        <script>
+            $(document).ready(function() {
+               $('#input-multicomplete').multicomplete({
+                   minimum_length: 1,
+                   result_template: function(result, group, matched_field) {
+                        tmpl = '<div>';
+                        if(!!result.image) {
+                            tmpl += '<div class="image"><img src="' + result.image + '" /></div>';
+                        }
+                        tmpl += '<div>' + result.name + '</div>';
+                        if(!!result.address) {
+                            tmpl += '<div class="meta">' + result.address + '</div>';
+                        }
+                        // Only display this field if something was matched in it
+                        if(!!result.cuisine && matched_field == 'cuisine') {
+                            tmpl += '<div class="cuisine">Cuisine offered: ' + result.cuisine + '</div>';
+                        }
+                        tmpl += '</div>';
+                        return tmpl;
+                   },
+                   result_click: function(row, group) {
+                       alert('You chose "' + row.name + '" in ' + group);
+                   },
+                   source: 'demo-source.json'
+               }); 
+            });
+        </script>
+        <style type="text/css">
+            
+            /* DEMO STYLES */
+            
+            .result .image {
+                float: left;
+                margin-right: 10px;
+            }
+            
+            .result .image img {
+                width: 32px;
+                height: 32px;
+                border: 1px solid #ccc;
+                padding: 1px;
+            }
+            
+            .result .meta {
+                font-size: 11px;
+                color: #666;
+            }
+            
+            .result a {
+                text-decoration: underline;
+            }
+            
+            .result:hover {
+                background-color: #f7f7f7;
+            }
+            
+            
+        </style>
+    </head>
+    <body>
+        <div>
+            Start typing a city: <input type="text" name="multiselect" id="input-multicomplete" />
+        </div>        
+    </body>
+</html>
