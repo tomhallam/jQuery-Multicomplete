@@ -1,7 +1,10 @@
-=== jQuery Multicomplete ===
+jQuery Multicomplete
+====================
+
 A quick and intuitive way to show the most relevant results to your users.
 
-== How to use it ==
+How to use it
+-------------
 
 Installation couldn't be simpler! Simply include jQuery, the Multicomplete plugin (including it's CSS if you want it to look pretty!) and add this to your initialisation code for the page:
 
